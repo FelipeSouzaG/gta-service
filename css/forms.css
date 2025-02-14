@@ -1,0 +1,415 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2em;
+  gap: 2em;
+  width: 100%;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 80%;
+  position: relative;
+}
+
+.form-group-label {
+  position: absolute;
+  transform: translateY(-50%);
+  top: 50%;
+  left: 0.7em;
+  font-family: var(--font-1);
+  font-weight: 600;
+  font-size: 0.8em;
+  pointer-events: none;
+  color: var(--color-2);
+  padding: 0.7em;
+  border-radius: 0.5em;
+  transition: 0.35s;
+}
+
+/* Estilo básico para o campo de entrada */
+.form-group-input {
+  width: 100%;
+  font-family: var(--font-1);
+  font-weight: 500;
+  font-size: 1em;
+  text-align: center;
+  color: var(--color-2);
+  padding: 1em 1em 0.3em;
+  border: none;
+  border-top: 0.1em solid var(--color-2);
+  border-bottom: 0.1em solid var(--color-2);
+  background-color: var(--color-trans-2);
+  outline: none;
+  border-radius: 0.7em;
+  transition: 0.3s;
+}
+
+/* Efeito de hover no campo */
+.form-group-input:hover {
+  border-top: 0.1em solid var(--color-3);
+  border-bottom: 0.1em solid var(--color-3);
+  background-color: var(--color-trans-3);
+}
+
+/* Efeito de hover no rótulo */
+.form-group-input:hover ~ .form-group-label {
+  color: var(--color-3);
+}
+
+/* Estilo para o campo focado */
+.form-group-input:focus {
+  background-color: var(--color-2);
+  color: var(--color-1);
+  border-top: 0.1em solid var(--color-trans-2);
+  border-bottom: 0.1em solid var(--color-trans-2);
+}
+
+/* Estilo para o rótulo quando o campo está focado ou válido */
+.form-group-input:focus ~ .form-group-label,
+.form-group-input:valid ~ .form-group-label {
+  top: 0;
+  font-size: 0.7em;
+  font-weight: 500;
+  background-color: var(--color-2);
+  color: var(--color-1);
+  padding: 0.2em 1em 0.3em;
+}
+
+.form-group-input:not([required]) ~ .form-group-label {
+  position: absolute;
+  transform: translateY(-50%);
+  top: 50%;
+  left: 0.7em;
+  font-family: var(--font-1);
+  font-weight: 600;
+  font-size: 0.8em;
+  pointer-events: none;
+  color: var(--color-2);
+  padding: 0.7em;
+  border-radius: 0.5em;
+  background-color: transparent;
+  transition: 0.35s;
+}
+
+/* Quando o input não obrigatório está focado */
+.form-group-input:not([required]):focus ~ .form-group-label {
+  top: 0;
+  font-size: 0.7em;
+  font-weight: 500;
+  background-color: var(--color-2);
+  color: var(--color-1);
+  padding: 0.2em 1em 0.3em;
+}
+
+/* Quando o input não obrigatório contém texto */
+.form-group-input:not([required]):not(:placeholder-shown) ~ .form-group-label {
+  top: 0;
+  font-size: 0.7em;
+  font-weight: 500;
+  background-color: var(--color-2);
+  color: var(--color-1);
+  padding: 0.2em 1em 0.3em;
+}
+
+.form-group-input.valid {
+  background-color: var(--color-valid);
+  color: var(--color-3);
+  font-weight: 600;
+  border-top: 0.1em solid transparent;
+  border-bottom: 0.1em solid transparent;
+}
+
+.form-group-input.invalid {
+  background-color: var(--color-invalid);
+  color: var(--color-3);
+  font-weight: 600;
+  border-top: 0.1em solid transparent;
+  border-bottom: 0.1em solid transparent;
+}
+
+.icon-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.icon-input {
+  flex: 1;
+}
+
+.toggle-icon-input {
+  position: absolute;
+  top: 1em;
+  right: 1em;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1em;
+  padding: 0;
+}
+
+.requirements {
+  font-family: var(--font-1);
+  font-size: 0.8em;
+  text-align: justify;
+  list-style-type: none;
+}
+
+.requirements-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5em;
+  width: 100%;
+}
+
+.radio {
+  display: none;
+}
+
+.radio + .span {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  font-size: 0.9em;
+  margin-right: 1em;
+}
+
+.radio + .span::before {
+  content: "";
+  width: 0.9em;
+  height: 0.9em;
+  border: 2px solid var(--color-3);
+  border-radius: 50%;
+  background-color: var(--color-1);
+  margin-right: 0.5em;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.radio:checked + .span::before {
+  background-color: var(--color-1);
+  border-color: var(--color-2);
+}
+
+.radio:checked + .span::after {
+  content: "";
+  position: absolute;
+  width: 0.6em;
+  height: 0.6em;
+  background-color: var(--color-2);
+  border-radius: 50%;
+  top: 50%;
+  left: 0.55em;
+  transform: translate(-50%, -50%);
+}
+
+.radio:checked~.span {
+  color: var(--color-2)
+}
+
+.checkbox {
+  display: none;
+}
+
+.checkbox + .span {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  font-size: 0.9em;
+  margin-right: 1em;
+}
+
+.checkbox + .span::before {
+  content: "";
+  width: 0.9em;
+  height: 0.9em;
+  border: 2px solid var(--color-3);
+  border-radius: 0.15em;
+  background-color: var(--color-1);
+  margin-right: 0.5em;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.checkbox:checked + .span::before {
+  background-color: var(--color-1);
+  border-color: var(--color-2);
+}
+
+.checkbox:checked + .span::after {
+  content: "✔";
+  font-size: 0.9em;
+  position: absolute;
+  color: var(--color-2);  
+  top: 50%;
+  left: 0.6em;
+  transform: translate(-50%, -50%);
+}
+
+.checkbox:checked~.span {
+  color: var(--color-2)
+}
+
+.label {
+  font-family: var(--font-1);
+  font-weight: 800;
+  font-size: 1em;
+  color: var(--color-3);
+}
+
+.span {
+  font-family: var(--font-1);
+  font-weight: 600;
+  font-size: 0.8em;
+  color: var(--color-3);
+}
+
+.form-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1em;
+  width: 100%;
+}
+
+.form-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2em;
+  width: 100%;
+}
+
+.data-items {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 1em;
+  margin-bottom: 1em;
+  width: 90%;
+}
+
+.form-center-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5em;
+  width: 100%;
+  margin-bottom: 0.5em;
+}
+
+/* select list */
+.select {
+  font-family: var(--font-1);
+  font-size: 1em;
+  font-weight: 500;
+  color: var(--color-2);
+  width: 80%;
+  margin: 0.5em 0 1em 0;
+  padding: 0.5em 1em;
+  background-color: var(--color-trans-2);
+  border-radius: 0.7em;
+  outline: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.select option {
+  outline: none;
+  font-size: 0.8em;
+  font-weight: 500;
+  text-align: start;
+  border: none;
+}
+
+.select:focus option {
+  outline: none;
+  background-color: var(--color-trans-2);
+  color: var(--color-2);
+  transition: background-color 0.3s;
+}
+
+.select:focus option {
+  outline: none;
+  color: var(--color-2);
+  background-color: var(--color-trans-2);
+  transition: background-color 0.3s;
+}
+
+.select:valid {
+  font-weight: 600;
+  font-size: 0.8em;
+}
+
+/* campo de busca com lista*/
+.dropdown-form {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 80%;
+} 
+
+.dropdown-input {
+  font-family: var(--font-1);
+  font-size: 1em;
+  font-weight: 500;
+  color: var(--color-3);
+  text-align: center;
+  width: 100%;
+  margin: 0.5em 0 1em 0;
+  padding: 0.5em 1em;
+  background-color: var(--color-viw);
+  border: 0.05em solid var(--color-3);
+  border-radius: 0.7em;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  cursor: pointer;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.dropdown-list {
+  position: absolute;
+  top: 80%;
+  left: 0;
+  width: 100%;
+  max-height: 10em;
+  overflow-y: auto;
+  background-color: var(--color-1);
+  border: 0.05em solid var(--color-3);
+  border-top: none;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  z-index: 10;
+}
+
+.dropdown-item {
+  padding: 0.5em;
+  cursor: pointer;
+  color: var(--color-1);
+  background-color: var(--color-3);
+  transition: background-color 0.3s;
+}
+
+.dropdown-item:hover {
+  background-color: var(--color-2);
+  color: var(--color-1);
+}
+
+.details-table {
+  margin-top: 0;
+}

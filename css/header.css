@@ -1,0 +1,265 @@
+.logo {
+ display: flex;
+ flex-direction: column;
+ justify-content: center;
+ align-items: center;
+ text-decoration: none;
+ color: inherit;
+ transition: transform 0.3s;
+}
+
+.logo:hover {
+ transform: scale(1.1);
+}
+.logo:active {
+ transform: scale(1.2);
+}
+
+.logo-principal {
+  font-family: var(--font-1);
+  font-weight: 900;
+  font-size: 0.92em;
+  color: var(--color-1)
+}
+
+.logo-secundario {
+  font-family: var(--font-1);
+  font-weight: 700;
+  font-size: 0.9em;
+  color: var(--color-2)
+}
+
+.hidden {
+ display: none;
+}
+
+.button-menu {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ gap: 1em;
+}
+
+.button-menu-cart {
+ display: flex;
+ align-items: start;
+ justify-content: flex-start;
+ background: transparent;
+ padding: 0.1em;
+ cursor: pointer;
+ border-radius: 0.5em;  
+ transition: transform 0.3s;
+}
+
+.hamburger {
+ font-size: 1.7em;
+ font-weight: 700;
+ text-align: center;
+ background-color: transparent;
+ padding: 0 0.25em;
+ cursor: pointer;
+ color: var(--color-1);
+ border-radius: 0.3em;
+ border: 2px solid transparent;
+ transition: transform 0.3s;
+}
+
+.hamburger:hover {
+ background-color: var(--color-2);
+ border: 2px solid var(--color-1);
+ transform: scale(1.05);
+}
+.hamburger:active {
+ transform: scale(1.2);
+}
+
+.menu {
+ display: none;
+ flex-direction: column;
+ position: absolute;
+ top: 100%;
+ left: 5%;
+ width: 95%;
+ background-color: transparent;
+ z-index: 1;
+ border-radius: 2em;
+ transition: all 0.3s ease-in-out;
+}
+
+.menu.show {
+ display: flex;
+}
+
+.menu-list {
+ list-style: none;
+ padding: 0;
+ margin: 0;
+ width: 100%;
+ border-radius: 2em;
+}
+
+.menu-item {
+ width: 100%;
+ border-radius: 0.5em;
+ padding: 0.1em;
+ transition: transform 0.3s;
+}
+.menu-item:hover {
+ transform: scale(1.05);
+}
+.menu-item:active {
+ transform: scale(1.08);
+}
+
+.submenu-btn {
+ width: 100%;
+ text-align: left;
+ background: none;
+ border: 1px solid transparent;
+ cursor: pointer;
+ font-family: var(--font-1);
+ font-weight: 800;
+ font-size: 1em;
+ color: var(--color-1);
+ padding: 0.5em 1em 0.5em 2em;
+ background-color: var(--color-3);
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ border-radius: 2em;
+ border-top-right-radius: 0;
+ border-bottom-right-radius: 0;
+}
+
+.icon {
+ font-size: 1.4em;
+ color: var(--color-1);
+ transition: transform 0.3s;
+}
+
+.icon:hover {
+ transform: scale(1.1);
+}
+.icon:active {
+ transform: scale(1.2);
+ color: var(--color-1);
+}
+
+.submenu {
+ display: none;
+ list-style: none;
+ padding: 0;
+ margin: 0;
+ background-color: transparent;
+ transition: max-height 0.3s ease-in-out;  
+}
+
+.submenu a {
+ text-decoration: none;
+ display: block;
+ background-color: var(--color-1);
+ padding: 0.5em 0 0.5em 2em;
+ font-family: var(--font-2);
+ color: var(--color-3);
+ font-weight: 800;
+ border: 1px solid var(--color-3);
+ border-radius: 2em;
+ border-top-right-radius: 0;
+ border-bottom-right-radius: 0;
+ transition: transform 0.3s;
+}
+
+.submenu a:hover {
+ background-color: var(--color-2);
+ font-weight: 800;
+ color: var(--color-1);
+ transform: scale(1.05);
+}
+.submenu a:active {
+ background-color: var(--color-2);
+ font-weight: 800;
+ color: var(--color-3);
+ transform: scale(1.1);
+}
+
+.menu-item.open .submenu {
+ display: block;
+}
+
+.navbar {
+  display: none;
+}
+
+.navbar-list {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  list-style: none;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+.navbar-item {
+  flex: 1;
+  text-align: center;
+  position: relative;
+}
+
+.navbar-link {
+  display: block;
+  text-decoration: none;
+  font-family: var(--font-1);
+  font-weight: 600;
+  color: var(--color-1);
+  font-size: 1em;
+  transition: background-color 0.3s, color 0.3s;
+  padding: 1em 0;
+  height: 100%;
+}
+
+.navbar-link:hover {
+  background-color: var(--color-2);
+  color: var(--color-1);
+}
+
+.dropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: var(--color-1);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-radius: 0 0 0.5em 0.5em;
+  box-shadow: 0 0.1em 0.2em var(--color-trans-3);
+}
+
+.dropdown li {
+  width: 100%;
+  padding: 0;
+}
+
+.dropdown a {
+  display: block;
+  text-decoration: none;
+  font-family: var(--font-1);
+  font-weight: 600;
+  color: var(--color-3);
+  font-size: 1em;
+  padding: 0.8em 1em;
+  transition: background-color 0.3s, color 0.3s;
+  width: 100%;
+}
+
+.dropdown a:hover {
+  background-color: var(--color-2);
+  color: var(--color-1);
+}
+
+.navbar-item:hover .dropdown {
+  display: block;
+  z-index: 1;
+}

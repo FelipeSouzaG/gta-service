@@ -1,0 +1,94 @@
+table {
+  width: 98%;
+  border-collapse: collapse;
+  padding: 1em 0.5em;
+  table-layout: fixed;
+  margin-bottom: 1em;
+}
+
+thead {
+ background-color: var(--color-3);
+}
+
+th {
+  font-family: var(--font-1);
+  font-weight: 500;
+  font-size: 0.8em;
+  color: var(--color-1);
+  border: 1px solid var(--color-3);
+  padding: 0.5em 0;
+  text-align: center;
+}
+
+td {
+  border: 1px solid var(--color-3);
+  padding: 0.2em 0.4em;
+  word-wrap: break-word;
+  word-break: break-word;
+  white-space: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.center {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+.button-client-table {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 80%;
+}
+
+.endBtn {
+  background-color: var(--color-trans-2);
+  color: var(--color-2);
+  font-size: 1em;
+  padding: 0.1em 0.2em;
+  border-radius: 25%;
+  border: 0.05em solid transparent;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.endBtn:hover {
+  background-color: var(--color-2);
+  transform: scale(1.1);
+  color: var(--color-1);
+  border: 0.05em solid transparent;
+}
+.endBtn:active {
+  background-color: var(--color-valid);
+  transform: scale(1.2);
+  color: var(--color-3);
+  border: 0.05em solid var(--color-3);
+}
+
+.tabBtn {
+  background-color: var(--color-trans-2);
+  color: var(--color-2);
+  border-radius: 25%;
+  font-size: 1.2em;
+  border: 0.05em solid var(--color-2);
+  padding: 0.2em 0.3em;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.tabBtn:hover {
+  background-color: var(--color-2);
+  transform: scale(1.1);
+  color: var(--color-1);
+  border: 0.05em solid transparent;
+}
+.tabBtn:active {
+  background-color: var(--color-valid);
+  transform: scale(1.2);
+  color: var(--color-3);
+  border: 0.05em solid var(--color-3);
+}

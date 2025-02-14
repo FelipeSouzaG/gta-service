@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="./css/office.css">
+    <script type="module" src="./js/offices.js" defer></script>
+    <script type="module" src="./controller/User.js" defer></script>
+    <script type="module" src="./controller/Client.js" defer></script>
+    <script type="module" src="./controller/Officers.js" defer></script>
+    <script type="module" src="./controller/Service.js" defer></script>
+    <script type="module" src="./controller/Request.js" defer></script>
+    <script type="module" src="./controller/jobs.js" defer></script>
+  </head>
+
+  <body>
+
+    <header>
+      <a href="./index.html" class="logo">
+        <span class="logo-principal">GTA AR CONDICIONADO</span>
+        <span class="logo-secundario">Ambiente de Serviços</span>
+      </a>
+      <div id="button-menu" class="button-menu">    
+        <button id="hamburger" class="hamburger">&#9776;</button>
+      </div>      
+      <nav id="menu" class="menu">
+        <ul class="menu-list">
+          <li class="menu-item data-user-mobile hidden">
+            <button class="submenu-btn">
+              Dados de Acesso 
+              <span class="icon">
+                +
+              </span>
+            </button>
+            <ul class="submenu">
+              <li>
+                <a href="#" id="dataUserMobile">
+                  Alterar Dados 
+                </a>
+              </li>
+              <li>
+                <a href="#" id="logoutMobile">
+                  Sair 
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="menu-item officer-mobile hidden">
+            <button class="submenu-btn">
+              Serviços
+              <span class="icon">
+                +
+              </span>
+            </button>
+            <ul class="submenu">
+              <li>
+                <a href="#" id="serviceMobile">
+                  Programados 
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="menu-item request-client-mobile hidden">
+            <button class="submenu-btn">
+              Clientes
+              <span class="icon">
+                +
+              </span>
+            </button>
+            <ul class="submenu">
+              <li>
+                <a href="#" id="listClientMobile">
+                  Listar Clientes
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="menu-item request-officer-mobile hidden">
+            <button class="submenu-btn">
+              Colaboradores
+              <span class="icon">
+                +
+              </span>
+            </button>
+            <ul class="submenu">
+              <li>
+                <a href="#" id="listOfficerMobile">
+                  Listar Coraboradores
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="menu-item request-service-mobile hidden">
+            <button class="submenu-btn">
+              Serviços
+              <span class="icon">
+                +
+              </span>
+            </button>
+            <ul class="submenu">
+              <li>
+                <a href="#" id="listServiceMobile">
+                  Serviços GTA
+                </a>
+              </li>
+              <li>
+                <a href="#" id="listRequestMobile">
+                  Solicitações
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <nav class="navbar">
+        <ul class="navbar-list">
+          <li class="navbar-item request-service-desktop hidden">
+            <a href="#" class="navbar-link">Serviços</a>
+            <ul class="dropdown">
+              <li><a href="#" id="listServiceDesktop">Serviços GTA</a></li>
+              <li><a href="#" id="listRequestDesktop">Solicitações</a></li>
+            </ul>
+          </li>
+          <li class="navbar-item officer-desktop hidden">
+            <a href="#" class="navbar-link">Serviços</a>
+            <ul class="dropdown">
+              <li><a href="#" id="serviceDesktop">Programados</a></li>
+            </ul>
+          </li>
+          <li class="navbar-item request-client-desktop hidden">
+            <a href="#" class="navbar-link">Clientes</a>
+            <ul class="dropdown">
+              <li><a href="#" id="listClientDesktop">Listar Clientes</a></li>
+            </ul>
+          </li>
+          <li class="navbar-item request-officer-desktop hidden">
+            <a href="#" class="navbar-link">Colaboradores</a>
+            <ul class="dropdown">
+              <li><a href="#" id="listOfficerDesktop">Listar Colaboradores</a></li>
+            </ul>
+          </li>
+          <li class="navbar-item data-user-desktop hidden">
+            <a href="#" class="navbar-link">Dados de Acesso</a>
+            <ul class="dropdown">
+              <li><a href="#" id="dataUserDesktop">Alterar Dados</a></li>
+              <li><a href="#" id="logoutDesktop">Sair</a></li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+
+      <div id="session-timer" class="session-renew">
+        <div class="btn-session">
+          <i class="bi bi-arrow-counterclockwise enter" id="renew-session"></i>
+          <i class="bi bi-x-circle enter" id="exit-session"></i>
+        </div>
+        <div class="progress" id="progress-circle"></div>
+      </div>
+      
+      <section class="banner">
+
+      </section>
+      
+      <section class="section-content">
+        <div class="section-header">
+          <div class="section-header-title">
+            <label for="service">SERVIÇOS</label>
+            <button id="service" class="toggle-button">+</button>
+          </div> 
+        </div>
+        <div class="section-main">
+          <div class="service-card">
+            <h2>Manutenção de Ar-Condicionado</h2>
+            <p>Realizamos serviços essenciais para garantir o bom funcionamento do seu ar-condicionado:</p>
+            <ul>
+              <li>Limpeza Química</li>
+              <li>Identificação e reparo de vazamentos</li>
+              <li>Manutenção preventiva e corretiva</li>
+            </ul>
+          </div>
+          <div class="service-card">
+            <h2>Instalação de Ar-Condicionado</h2>
+            <p>Nossos técnicos realizam a instalação completa e eficiente:</p>
+            <ul>
+              <li>Fixação de vaporizadores e condensadores</li>
+              <li>Instalação de tubulações e cabeamento</li>
+              <li>Configuração ideal para o ambiente</li>
+            </ul>
+          </div>
+          <div class="service-card">
+            <h2>Solicite um Serviço</h2>
+            <p>Faça uma Requisição de Serviço:</p>
+            <ul>
+              <li>Registre-se e entre com suas credenciais</li>
+              <li>Cadastre um Endereço e Ambiente</li>
+              <li>Faça uma Solicitação de Serviço.</li>
+            </ul>
+          </div>
+          <div class="section-footer">
+            <a href="#" id="registerSection" class="section-footer-botton">Registre-se</a>
+          </div>
+        </div>
+        
+      </section>
+      
+      <section class="section-content">
+        <div class="section-header">
+          <div class="section-header-title">
+            <label for="products">PRODUTOS</label>
+            <button id="products" class="toggle-button">+</button>
+          </div> 
+        </div>
+        <div class="section-main">
+          os produtos vão aqui
+        </div>
+      </section>
+      
+    </main>
+  
+    <footer>
+      <p>&copy2024 - GTA Ar Condicionado&reg</p>
+      <h6>Desenvolvido por FG Soluções Web&reg</h6> 
+    </footer>
+
+    <div id="modal-register" class="modal-user">
+      <div class="modal-user-content">
+        <div class="modal-user-content-header">
+          <i></i>
+          <i class="bi bi-x close" id="close-register"></i>
+        </div>
+        <div class="modal-user-content-title">
+          <span id="modal-register-title" class="modal-user-title"></span>
+        </div>
+        <div id="modal-register-main" class="modal-user-content-main"></div>
+        <div id="modal-register-footer" class="modal-user-footer"></div>        
+      </div>
+    </div>
+
+    <div id="modal-details" class="modal-user">
+      <div class="modal-user-content">
+        <div class="modal-user-content-header">
+          <i class="bi bi-arrow-left-short arrow-left" id="arrow-details"></i>
+          <i class="bi bi-x close" id="close-details"></i>
+        </div>
+        <div class="modal-user-content-title">
+          <span id="modal-details-title" class="modal-user-title"></span>
+        </div>
+        <div id="modal-details-main" class="modal-user-content-main"></div>
+        <div id="modal-details-footer" class="modal-user-footer"></div>        
+      </div>
+    </div>
+
+    <div id="modal-information" class="modal-information">
+      <div class="modal-information-content">
+        <div class="modal-information-content-header">
+          <i></i>
+          <i class="bi bi-x close" id="close-information"></i>
+        </div>
+        <div class="modal-information-content-title">
+          <span id="modal-information-title" class="modal-information-title"></span>
+        </div>
+        <div id="modal-information-main" class="modal-information-content-main"></div>
+        <div id="modal-information-footer" class="modal-information-content-footer">
+          <button id="exit-information" class="modal-information-close"> Fechar </button>
+        </div>        
+      </div>
+    </div>
+  
+    <div id="modal" class="modal">
+      <div class="modal-content">
+        <h2 id="modalTitle"></h2>
+        <p id="modalMessage"></p>
+        <div class="modal-content-btn">
+          <button id="modalBtnOk" class="modal-content-btn-ok">
+            Sim
+          </button>
+          <button id="modalBtnCancel" class="modal-content-btn-cancel">
+            Não
+          </button>
+        </div> 
+      </div>
+    </div>
+  </body>
+</html>
