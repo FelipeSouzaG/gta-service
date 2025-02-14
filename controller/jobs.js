@@ -433,8 +433,7 @@ export async function servicesOrderDetails(order) {
   function checkEnvironment() {
     const isEnvironment =
       order.requestId.environmentId &&
-      Object.keys(order.requestId.environmentId).length > 0 &&
-      !order.requestId.envId;
+      Object.keys(order.requestId.environmentId).length > 0;
 
     if (isEnvironment) {
       envBtn.classList.add('hidden');
@@ -442,14 +441,12 @@ export async function servicesOrderDetails(order) {
       finishBtn.classList.remove('hidden');
       finishBtn.classList.add('modal-content-btn-ok');
     } else {
-      if (order.requestId.requestType === 'Instalação') {
-        showModalAlert(
-          'Alert',
-          'Criar Ambiente!',
-          'Antes de Finalizar esta Ordem de Serviço, crie o ambiente do Novo Equipamento instalado.',
-          closeModal
-        );
-      }
+      showModalAlert(
+        'Alert',
+        'Criar Ambiente!',
+        'Antes de Finalizar esta Ordem de Serviço, crie o ambiente do Novo Equipamento instalado.',
+        closeModal
+      );
       envBtn.classList.remove('hidden');
       envBtn.classList.add('modal-content-btn-ok');
       finishBtn.classList.remove('modal-content-btn-ok');
