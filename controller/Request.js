@@ -107,7 +107,7 @@ async function listRequestModal() {
 
   footer.innerHTML = `
     <div class="modal-user-footer">
-      <button type="button" id="newRequestBtn" class="modal-content-btn-enable">+Requisição</button>
+      <button type="button" id="newRequestBtn" class="hidden">+Requisição</button>
     </div>
   `;
 
