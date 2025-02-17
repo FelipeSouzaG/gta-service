@@ -21,7 +21,6 @@ import {
   normalizeDate,
 } from '../js/validation.js';
 import { showModalNewService } from './Service.js';
-//import { envAddressDetails } from './Environment.js';
 
 document.addEventListener('DOMContentLoaded', async function () {
   document.getElementById('listRequestMobile').addEventListener('click', () => {
@@ -64,12 +63,10 @@ async function listRequestModal() {
       'Não há requisições!',
       'Por favor, faça cadastros de requisições de serviços para clientes',
       async () => {
-        //await newRequestModal();
         closeModalRegister();
       }
     );
   }
-  //////////////////////////////////
 
   let filteredRequests = requests;
 
@@ -135,12 +132,6 @@ async function listRequestModal() {
     document.getElementById('request-list').innerHTML =
       renderRequestRows(filteredRequest);
   }
-  /*
-  document
-    .getElementById('newRequestBtn')
-    .addEventListener('click', async () => {
-      await newRequestModal();
-    });*/
 }
 
 function renderRequestRows(requests) {
@@ -283,8 +274,6 @@ async function requestDetails(request) {
       </tr>`;
   }
 
-  /////////////////////////////////////////////
-
   const reqType = request.requestType;
   let typeService;
   const isServiceIds =
@@ -348,8 +337,6 @@ async function requestDetails(request) {
   } else {
     typeService = '';
   }
-
-  ////////////////////////////////////////////
 
   const isComplement =
     request.addressId.complement &&
@@ -498,20 +485,6 @@ async function requestDetails(request) {
           </label>
         </div>
   
-        <div id="visit-container" class="hidden">
-          <div class="form-content">
-            <label class="label">Agendar visita para:</label>
-            <div class="form-group">
-              <input class="form-group-input" type="date" id="dateVisit" placeholder="">
-              <label class="form-group-label" for="">Data:</label>
-            </div>
-            <div class="form-group">
-              <input class="form-group-input" type="time" id="timeVisit" min="08:00" max="18:00" placeholder="">
-              <label class="form-group-label" for="">Horário:</label>
-            </div>
-          </div>
-        </div>
-  
         <div id="finished-container" class="hidden">
           <label class="label">Finalizar ${request.requestNumber}?</label>
           <div class="data-items">       
@@ -552,27 +525,24 @@ async function requestDetails(request) {
     if (event.target.classList.contains('view-budgetNoClient-btn')) {
       const enterBudget = JSON.parse(event.target.dataset.request);
       await openBudgetClient(enterBudget);
-      //closeModalRegister();
+      closeModalRegister();
     }
   });
 
   let selectedStatus = '';
-  let visitDate = document.getElementById('dateVisit');
-  let visitTime = document.getElementById('timeVisit');
   let finishedDescription = document.getElementById('finished');
-
+  const isNew =
+    !request.environmentId &&
+    (!request.serviceIds || request.serviceIds.length === 0);
   function handleStatusOptions() {
-    const visitContainer = document.getElementById('visit-container');
     const radioOptions = document.querySelectorAll('.radio-option');
     const divAction = document.getElementById('updateRequestAction');
-
     if (request.requestStatus === 'Ordem de Serviço') {
       radioOptions.forEach((option) => {
         if (option.querySelector('input').value !== 'Finalizado') {
           option.style.display = 'none';
         }
       });
-      visitContainer.classList.add('hidden');
     } else if (request.requestStatus === 'Orçamento') {
       if (request.budgetId.budgetStatus === 'Aprovado') {
         radioOptions.forEach((option) => {
@@ -590,70 +560,88 @@ async function requestDetails(request) {
           }
         });
       }
-      visitContainer.classList.add('hidden');
     } else if (request.requestStatus === 'Visita Técnica') {
-      radioOptions.forEach((option) => {
-        if (option.querySelector('input').value === 'Visita Técnica') {
-          option.style.display = 'none';
-        }
-      });
+      if (isNew) {
+        radioOptions.forEach((option) => {
+          if (
+            option.querySelector('input').value !== 'Orçamento' &&
+            option.querySelector('input').value !== 'Finalizado'
+          ) {
+            option.style.display = 'none';
+          }
+        });
+      } else {
+        radioOptions.forEach((option) => {
+          if (option.querySelector('input').value === 'Visita Técnica') {
+            option.style.display = 'none';
+          }
+        });
+      }
     } else if (request.requestStatus === 'Finalizado') {
       divAction.classList.remove('form-center');
       divAction.classList.add('hidden');
+    } else if (request.requestStatus === 'Pendente') {
+      if (isNew) {
+        radioOptions.forEach((option) => {
+          if (
+            option.querySelector('input').value !== 'Visita Técnica' &&
+            option.querySelector('input').value !== 'Orçamento' &&
+            option.querySelector('input').value !== 'Finalizado'
+          ) {
+            option.style.display = 'none';
+          }
+        });
+      } else {
+        radioOptions.forEach((option) => {
+          if (
+            option.querySelector('input').value !== 'Visita Técnica' &&
+            option.querySelector('input').value !== 'Orçamento' &&
+            option.querySelector('input').value !== 'Ordem de Serviço' &&
+            option.querySelector('input').value !== 'Finalizado'
+          ) {
+            option.style.display = 'none';
+          }
+        });
+      }
     }
   }
 
   handleStatusOptions();
 
   function toggleType() {
-    const visitContainer = document.getElementById('visit-container');
     const finishedContainer = document.getElementById('finished-container');
     const radioInputs = document.querySelectorAll(
       'input[name="update-status"]'
     );
 
     radioInputs.forEach((input) => {
-      input.addEventListener('change', () => {
+      input.addEventListener('change', async () => {
         if (input.value === 'Visita Técnica' && input.checked) {
-          visitContainer.classList.remove('hidden');
           finishedContainer.classList.remove('form-center');
-          visitContainer.classList.add('form-center');
           finishedContainer.classList.add('hidden');
           selectedStatus = 'Visita Técnica';
           clearFinished();
           checked();
         } else if (input.value === 'Finalizado' && input.checked) {
-          visitContainer.classList.remove('form-center');
           finishedContainer.classList.remove('hidden');
-          visitContainer.classList.add('hidden');
           finishedContainer.classList.add('form-center');
           selectedStatus = 'Finalizado';
-          clearVisit();
           checked();
         } else if (input.value === 'Orçamento' && input.checked) {
-          visitContainer.classList.remove('form-center');
           finishedContainer.classList.remove('form-center');
           finishedContainer.classList.add('hidden');
-          visitContainer.classList.add('hidden');
           selectedStatus = 'Orçamento';
           clearAll();
           checked();
         } else if (input.value === 'Ordem de Serviço' && input.checked) {
-          visitContainer.classList.remove('form-center');
           finishedContainer.classList.remove('form-center');
           finishedContainer.classList.add('hidden');
-          visitContainer.classList.add('hidden');
           selectedStatus = 'Ordem de Serviço';
           clearAll();
           checked();
         }
       });
     });
-  }
-
-  function clearVisit() {
-    visitDate.value = '';
-    visitTime.value = '';
   }
 
   function clearFinished() {
@@ -665,110 +653,10 @@ async function requestDetails(request) {
   }
 
   function clearAll() {
-    clearVisit();
     clearFinished();
   }
 
   toggleType();
-
-  function isSchedulingDateValid(date) {
-    const selectedDate = new Date(date);
-    const today = new Date();
-    const selectedDateOnly = new Date(
-      selectedDate.getFullYear(),
-      selectedDate.getMonth(),
-      selectedDate.getDate() + 1,
-      selectedDate.getHours() + 3,
-      selectedDate.getMinutes(),
-      selectedDate.getSeconds(),
-      selectedDate.getMilliseconds() - 1
-    );
-
-    const todayOnly = new Date(
-      today.getFullYear(),
-      today.getMonth(),
-      today.getDate(),
-      today.getHours(),
-      today.getMinutes(),
-      today.getSeconds(),
-      today.getMilliseconds()
-    );
-
-    const day = selectedDateOnly.getDay();
-    if (day === 0 || day === 6) {
-      showModalAlert(
-        'Alert',
-        'Data Inválida!',
-        'Marque um dia de segunda a sexta.',
-        closeModal
-      );
-      document.getElementById('dateVisit').value = '';
-      return false;
-    }
-
-    if (selectedDateOnly < todayOnly) {
-      showModalAlert(
-        'Alert',
-        'Data Inválida!',
-        'Não é possível agendar para dias e horários passados.',
-        closeModal
-      );
-      document.getElementById('dateVisit').value = '';
-      return false;
-    }
-    return true;
-  }
-
-  function isSchedulingTimeValid(time) {
-    const [hour, minute] = time.split(':').map(Number);
-    if (hour < 8 || (hour === 18 && minute > 0) || hour > 18) {
-      showModalAlert(
-        'Alert',
-        'Horário Inválido!',
-        'Insira um horário de 08:00 às 18:00',
-        closeModal
-      );
-      return false;
-    }
-
-    const selectedDate = document.getElementById('dateVisit').value;
-    const todayOnly = new Date().toISOString().split('T')[0];
-    if (selectedDate) {
-      if (selectedDate === todayOnly) {
-        const today = new Date();
-        const selectedDateOnly = new Date(
-          `${selectedDate}T${String(hour).padStart(2, '0')}:${String(
-            minute
-          ).padStart(2, '0')}:00`
-        );
-        if (selectedDateOnly < today) {
-          showModalAlert(
-            'Alert',
-            'Horário Inválido!',
-            'Horário selecionado já passou para o dia de hoje.',
-            closeModal
-          );
-          return false;
-        }
-      }
-    }
-    return true;
-  }
-
-  document
-    .getElementById('dateVisit')
-    .setAttribute('min', new Date().toISOString().split('T')[0]);
-
-  document.getElementById('dateVisit').addEventListener('input', function () {
-    isSchedulingDateValid(this.value);
-  });
-
-  document.getElementById('timeVisit').addEventListener('input', function () {
-    const time = this.value;
-    if (!isSchedulingTimeValid(time)) {
-      this.value = '';
-    }
-  });
 
   function setupSingleCheckboxSelection() {
     const checkboxes = document.querySelectorAll('input[name="finished"]');
@@ -793,41 +681,50 @@ async function requestDetails(request) {
   const orderBtn = document.getElementById('order-Btn');
   const finishedBtn = document.getElementById('finished-Btn');
 
-  visitDate.addEventListener('input', checked);
-  visitTime.addEventListener('input', checked);
-
   document.querySelectorAll('input[name="finished"]').forEach((checkbox) => {
     checkbox.addEventListener('change', checked);
   });
 
   function checked() {
-    const isVisitFilled = visitDate.value && visitTime.value;
+    const isVisitFilled = selectedStatus === 'Visita Técnica';
     const isFinishedFilled = finishedDescription.trim() !== '';
     const isBudget = selectedStatus === 'Orçamento';
     const isOrder = selectedStatus === 'Ordem de Serviço';
     if (isVisitFilled) {
       scheduleBtn.classList.remove('hidden');
       scheduleBtn.classList.add('modal-content-btn-edit');
+      budgetBtn.classList.remove('modal-content-btn-edit');
+      orderBtn.classList.remove('modal-content-btn-edit');
+      finishedBtn.classList.remove('modal-content-btn-edit');
       budgetBtn.classList.add('hidden');
       orderBtn.classList.add('hidden');
       finishedBtn.classList.add('hidden');
     } else if (isBudget) {
       budgetBtn.classList.remove('hidden');
       budgetBtn.classList.add('modal-content-btn-edit');
+      scheduleBtn.classList.remove('modal-content-btn-edit');
+      orderBtn.classList.remove('modal-content-btn-edit');
+      finishedBtn.classList.remove('modal-content-btn-edit');
       scheduleBtn.classList.add('hidden');
       orderBtn.classList.add('hidden');
       finishedBtn.classList.add('hidden');
     } else if (isFinishedFilled) {
       finishedBtn.classList.remove('hidden');
       finishedBtn.classList.add('modal-content-btn-edit');
-      scheduleBtn.classList.add('hidden');
+      budgetBtn.classList.remove('modal-content-btn-edit');
+      orderBtn.classList.remove('modal-content-btn-edit');
+      scheduleBtn.classList.remove('modal-content-btn-edit');
       budgetBtn.classList.add('hidden');
       orderBtn.classList.add('hidden');
+      scheduleBtn.classList.add('hidden');
     } else if (isOrder) {
       orderBtn.classList.remove('hidden');
       orderBtn.classList.add('modal-content-btn-edit');
-      scheduleBtn.classList.add('hidden');
+      budgetBtn.classList.remove('modal-content-btn-edit');
+      scheduleBtn.classList.remove('modal-content-btn-edit');
+      finishedBtn.classList.remove('modal-content-btn-edit');
       budgetBtn.classList.add('hidden');
+      scheduleBtn.classList.add('hidden');
       finishedBtn.classList.add('hidden');
     } else {
       scheduleBtn.classList.add('hidden');
@@ -837,27 +734,8 @@ async function requestDetails(request) {
     }
   }
 
-  const requestId = request._id;
-
-  let dataRequestSendUpdate = {};
-
   scheduleBtn.onclick = async () => {
-    if (selectedStatus === 'Visita Técnica') {
-      if (!visitDate.value || !visitTime.value) {
-        return showModalAlert(
-          'Alert',
-          'Campos obrigatórios',
-          'Preencha a data e o horário da visita.',
-          closeModal
-        );
-      }
-      dataRequestSendUpdate = {
-        requestStatus: selectedStatus,
-        dateVisit: visitDate.value,
-        timeVisit: visitTime.value,
-      };
-      await sendUpdateRequest(dataRequestSendUpdate, requestId);
-    }
+    showModalNewSchedule(request);
   };
 
   budgetBtn.onclick = async () => {
@@ -877,11 +755,12 @@ async function requestDetails(request) {
         closeModal
       );
     }
-    dataRequestSendUpdate = {
+    const dataRequestSendUpdate = {
       requestStatus: selectedStatus,
       feedback: finishedDescription,
     };
-    await sendUpdateRequest(dataRequestSendUpdate, requestId);
+
+    await sendUpdateRequest(dataRequestSendUpdate, request._id);
   };
 }
 
@@ -929,8 +808,6 @@ async function sendUpdateRequest(dataSend, requestId) {
     return;
   }
 }
-
-////////////////////////////////////////
 
 async function showModalNewOrder(request) {
   let officers = [];
@@ -1286,8 +1163,6 @@ async function showModalNewOrder(request) {
   };
 }
 
-///////////////////////////////////////
-
 async function showModalNewBudget(request) {
   let servicesData = [];
   try {
@@ -1343,8 +1218,6 @@ async function showModalNewBudget(request) {
   const btnClose = document.getElementById('close-details');
   const btnReturn = document.getElementById('arrow-details');
   const footer = document.getElementById('modal-details-footer');
-
-  /////////////////////////////////////////////
 
   const reqType = request.requestType;
   let typeService;
@@ -1409,8 +1282,6 @@ async function showModalNewBudget(request) {
   } else {
     typeService = '';
   }
-
-  ////////////////////////////////////////////
 
   title.textContent = 'Orçamento';
   content.innerHTML = `
@@ -2097,4 +1968,250 @@ async function openBudgetClient(request) {
         showModalAlert('Alert', 'Erro de Conexão', error.message, closeModal);
       }
     });
+}
+
+async function showModalNewSchedule(request) {
+  let officers = [];
+  try {
+    const listOfficers = await listAllOfficers();
+    if (listOfficers.status === 401) {
+      showModalAlert('Next', listOfficers.title, listOfficers.msg, async () => {
+        await exitSession();
+      });
+    } else if (listOfficers.status === 403) {
+      showModalAlert('Alert', listOfficers.title, listOfficers.msg, closeModal);
+      return;
+    } else if (listOfficers.status === 400) {
+      showModalAlert('Next', listOfficers.title, listOfficers.msg, async () => {
+        await requestDetails(request);
+        closeModalDetails();
+      });
+    } else if (listOfficers.status === 200) {
+      const level = listOfficers.level;
+      await openSession(level);
+      officers = [...listOfficers.listOfficer];
+    }
+  } catch (error) {
+    console.error('Erro ao buscar dados de endereço:', error);
+    showModalAlert('Alert', 'Erro de Conexão!', error.message, closeModal);
+    return;
+  }
+
+  const technician = officers.filter((tec) => tec.officerType === 'Técnico');
+
+  if (technician.length === 0) {
+    showModalAlert(
+      'Next',
+      'Nenhum Técnico Cadastrado!',
+      'Cadastre Colaborador Nível Técnico para atribuir a uma Ordem de Serviço.',
+      async () => {
+        await requestDetails(request);
+        closeModalDetails();
+      }
+    );
+  }
+
+  const modal = document.getElementById('modal-details');
+  const title = document.getElementById('modal-details-title');
+  const content = document.getElementById('modal-details-main');
+  const btnClose = document.getElementById('close-details');
+  const btnReturn = document.getElementById('arrow-details');
+  const footer = document.getElementById('modal-details-footer');
+
+  title.textContent = 'Visita Técnica';
+  content.innerHTML = `
+    <div class="form-center">
+      <table class="details-table">
+        <thead>
+          <tr>
+            <th colspan="2" style="text-align: center;">
+              Requisição ${request.requestNumber}
+            </th>
+          </tr>
+        </thead>
+      </table>
+
+      <label class="label">Técnico para o Serviço:</label>
+      <select class="select" id="selectTechnician">
+        <option value="">Técnicos</option>
+        ${technician
+          .map(
+            (tec) => `<option value="${tec._id}">${tec.userId.name}</option>`
+          )
+          .join('')}
+      </select>
+
+      <div class="form-content">
+        <label class="label">Agendar Serviço para:</label>
+        <div class="form-group">
+          <input class="form-group-input" type="date" id="dateVisit" placeholder="">
+          <label class="form-group-label" for="">Data:</label>
+        </div>
+        <div class="form-group">
+          <input class="form-group-input" type="time" id="timeVisit" min="08:00" max="18:00" placeholder="">
+          <label class="form-group-label" for="">Horário:</label>
+        </div>
+      </div>
+  `;
+
+  footer.innerHTML = `
+    <div class="modal-user-footer">
+      <button type="button" id="sendOrder" class="hidden">Enviar</button>
+    </div>
+  `;
+
+  btnReturn.onclick = async function () {
+    await requestDetails(request);
+  };
+
+  btnClose.onclick = function () {
+    closeModalDetails();
+  };
+
+  modal.style.display = 'block';
+
+  let visitDate = document.getElementById('dateVisit');
+  let visitTime = document.getElementById('timeVisit');
+
+  function isSchedulingDateValid(date) {
+    const selectedDate = new Date(date);
+    const today = new Date();
+    const selectedDateOnly = new Date(
+      selectedDate.getFullYear(),
+      selectedDate.getMonth(),
+      selectedDate.getDate() + 1,
+      selectedDate.getHours() + 3,
+      selectedDate.getMinutes(),
+      selectedDate.getSeconds(),
+      selectedDate.getMilliseconds() - 1
+    );
+
+    const todayOnly = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate(),
+      today.getHours(),
+      today.getMinutes(),
+      today.getSeconds(),
+      today.getMilliseconds()
+    );
+
+    const day = selectedDateOnly.getDay();
+    if (day === 0 || day === 6) {
+      showModalAlert(
+        'Alert',
+        'Data Inválida!',
+        'Marque um dia de segunda a sexta.',
+        closeModal
+      );
+      document.getElementById('dateVisit').value = '';
+      return false;
+    }
+
+    if (selectedDateOnly < todayOnly) {
+      showModalAlert(
+        'Alert',
+        'Data Inválida!',
+        'Não é possível agendar para dias e horários passados.',
+        closeModal
+      );
+      document.getElementById('dateVisit').value = '';
+      return false;
+    }
+    return true;
+  }
+
+  function isSchedulingTimeValid(time) {
+    const [hour, minute] = time.split(':').map(Number);
+    if (hour < 8 || (hour === 18 && minute > 0) || hour > 18) {
+      showModalAlert(
+        'Alert',
+        'Horário Inválido!',
+        'Insira um horário de 08:00 às 18:00',
+        closeModal
+      );
+      return false;
+    }
+
+    const selectedDate = document.getElementById('dateVisit').value;
+    const todayOnly = new Date().toISOString().split('T')[0];
+    if (selectedDate) {
+      if (selectedDate === todayOnly) {
+        const today = new Date();
+        const selectedDateOnly = new Date(
+          `${selectedDate}T${String(hour).padStart(2, '0')}:${String(
+            minute
+          ).padStart(2, '0')}:00`
+        );
+        if (selectedDateOnly < today) {
+          showModalAlert(
+            'Alert',
+            'Horário Inválido!',
+            'Horário selecionado já passou para o dia de hoje.',
+            closeModal
+          );
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  document
+    .getElementById('dateVisit')
+    .setAttribute('min', new Date().toISOString().split('T')[0]);
+
+  document.getElementById('dateVisit').addEventListener('input', function () {
+    isSchedulingDateValid(this.value);
+  });
+
+  document.getElementById('timeVisit').addEventListener('input', function () {
+    const time = this.value;
+    if (!isSchedulingTimeValid(time)) {
+      this.value = '';
+    }
+  });
+
+  visitDate.addEventListener('input', checked);
+  visitTime.addEventListener('input', checked);
+  const sendBtn = document.getElementById('sendOrder');
+  function checked() {
+    const isVisitFilled = visitDate.value && visitTime.value;
+    if (isVisitFilled) {
+      sendBtn.classList.remove('hidden');
+      sendBtn.classList.add('modal-content-btn-ok');
+    } else {
+      sendBtn.classList.remove('modal-content-btn-ok');
+      sendBtn.classList.add('hidden');
+    }
+  }
+
+  sendBtn.onclick = async () => {
+    const technician = document.getElementById('selectTechnician');
+    if (technician.value === '') {
+      return showModalAlert(
+        'Alert',
+        'Técnico',
+        'Selecione um Técnico para o Serviço.',
+        closeModal
+      );
+    }
+    if (!visitDate.value || !visitTime.value) {
+      return showModalAlert(
+        'Alert',
+        'Campos obrigatórios',
+        'Preencha a data e o horário do Serviço.',
+        closeModal
+      );
+    }
+
+    const dataRequestSendUpdate = {
+      requestStatus: 'Visita Técnica',
+      officerId: technician.value,
+      dateVisit: visitDate.value,
+      timeVisit: visitTime.value,
+    };
+
+    await sendUpdateRequest(dataRequestSendUpdate, request._id);
+  };
 }
