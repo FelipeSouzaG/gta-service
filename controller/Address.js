@@ -262,7 +262,7 @@ export async function newAddress(data) {
   const userClient =
     addressDataType === 'isClient' ? `Cliente: ${data.name}` : '';
   const userOfficer =
-    addressDataType === 'isOfficer' ? `Colaborador: ${data.name}` : '';
+    addressDataType === 'isOfficer' ? `Colaborador: ${data.userId.name}` : '';
 
   const modal = document.getElementById('modal-details');
   const title = document.getElementById('modal-details-title');
