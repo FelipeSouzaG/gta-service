@@ -2,8 +2,7 @@ import {
   registerOfficer,
   listAllUsers,
   listAllOfficers,
-  getAddressOfficer,
-  getAddressId,
+  getAddressOfficerId,
 } from '../js/services.js';
 import {
   formatPhoneValue,
@@ -170,7 +169,7 @@ document.addEventListener('click', async (event) => {
 export async function openOfficerDetails(officer) {
   let address;
   try {
-    const addressOfficer = await getAddressId(officer._id);
+    const addressOfficer = await getAddressOfficerId(officer._id);
     if (addressOfficer.status === 401) {
       showModalAlert(
         'Next',
@@ -193,7 +192,8 @@ export async function openOfficerDetails(officer) {
     } else if (addressOfficer.status === 200) {
       const level = addressOfficer.level;
       await openSession(level);
-      address = addressOfficer.address[0];
+      const addresses = addressOfficer.addresses;
+      address = addresses[0];
     }
   } catch (error) {
     console.error('Erro ao buscar dados de endereço:', error);
@@ -684,8 +684,6 @@ async function newOfficer() {
     data.phone = phone;
     data.officerType = officerType.value;
     data.officerLevel = officerLevel.value;
-
-    console.log(data);
 
     try {
       const officerRegister = await registerOfficer(data);
