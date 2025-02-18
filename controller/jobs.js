@@ -8,7 +8,7 @@ import {
 } from '../js/modals.js';
 
 import { listAllServiceOfficer, registerHistory } from '../js/services.js';
-import { formatPhoneValue, formatPostalCode } from '../js/validation.js';
+import { formatPhoneValue, formatPostalCode, normalizeDate } from '../js/validation.js';
 import { newEnvironment, modalNewRequest } from './Environment.js';
 
 document.addEventListener('DOMContentLoaded', async function () {
@@ -234,7 +234,7 @@ async function orderDetails(order) {
           </tr>
           <tr>
             <td>Data Programada</td>
-            <td>${order.date}</td>
+            <td>${normalizeDate(order.date)}</td>
           </tr>
           <tr>
             <td>Hora Programada</td>
