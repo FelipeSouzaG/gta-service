@@ -118,9 +118,9 @@ export const getAddressOfficer = async (officerId) => {
   }
 };
 
-export const getAddressId = async (id) => {
+export const getAddressOfficerId = async (id) => {
   try {
-    const response = await fetch(`${apiUrl}/api/addresses/${id}`, {
+    const response = await fetch(`${apiUrl}/api/addresses/officer/${id}`, {
       method: 'GET',
       credentials: 'include',
     });
