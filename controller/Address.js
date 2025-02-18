@@ -506,7 +506,7 @@ export async function newAddress(data) {
     if (addressDataType === 'isClient') {
       dataSend.clientId = data._id;
     } else if (addressDataType === 'isOfficer') {
-      dataSend.officerId = data.userId._id;
+      dataSend.officerId = data._id;
     }
 
     try {
