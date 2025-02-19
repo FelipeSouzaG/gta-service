@@ -178,7 +178,7 @@ async function requestDetails(request) {
     <td>Status da Requisição</td>
     <td>${request.requestStatus}</td>
   </tr>`;
-  console.log(request);
+  
   if (request.requestStatus === 'Pendente') {
     status = `<tr>
         <td colspan="2" style="text-align: center; background-color: var(--color-pending);">
