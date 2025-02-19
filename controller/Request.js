@@ -178,16 +178,19 @@ async function requestDetails(request) {
     <td>Status da Requisição</td>
     <td>${request.requestStatus}</td>
   </tr>`;
+  console.log(request);
   if (request.requestStatus === 'Pendente') {
     status = `<tr>
         <td colspan="2" style="text-align: center; background-color: var(--color-pending);">
-          Requisição aguardando avaliação técnica.
+          Requisição criada em ${normalizeDate(
+            request.createdAt
+          )} aguardando avaliação técnica.
         </td>
       </tr>`;
   } else if (request.requestStatus === 'Retorno') {
     status = `<tr>
         <td colspan="2" style="text-align: center; background-color: var(--color-pending);">
-          Requisição gerada para serviço de Retorno
+          Requisição de Retorno para ${normalizeDate(request.requestDate)}.
         </td>
       </tr>`;
   } else if (request.requestStatus === 'Visita Técnica') {
