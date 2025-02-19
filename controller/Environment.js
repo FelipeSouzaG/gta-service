@@ -14,7 +14,7 @@ import {
   returnModal,
 } from '../js/modals.js';
 import { openDetailsClientAddressId } from './Address.js';
-//import { requestsEquipmentEnvironment } from './Request.js';
+
 let addressData;
 export async function listEnvironmentAddressClient(address) {
   addressData = address;
@@ -280,8 +280,6 @@ export async function envAddressDetails(env) {
   };
 }
 
-/////////////////////////////////////////////////////////////////
-
 export async function modalNewRequest(env) {
   let servicesData = [];
   try {
@@ -352,13 +350,19 @@ export async function modalNewRequest(env) {
           </label>
         </div>
         <div class="service-selection data-items-budget"></div>
+        
+        <label class="label">Agendar Serviço para:</label>
+        <div class="form-group">
+          <input class="form-group-input" type="date" id="dateVisit" placeholder="">
+          <label class="form-group-label" for="">Data:</label>
+        </div>
       </div>     
     </div>
   `;
 
   footer.innerHTML = `
       <div class="modal-user-footer">
-        <button type="button" id="saveRequest" class="modal-content-btn-ok"> Enviar </button>
+        <button type="button" id="saveRequest" class="hidden"> Enviar </button>
       </div>
     `;
 
@@ -372,20 +376,76 @@ export async function modalNewRequest(env) {
 
   modal.style.display = 'block';
 
-  /*document
-    .getElementById('newAddressBtn')
-    .addEventListener('click', async () => {
-      localStorage.setItem(
-        'returnModal',
-        JSON.stringify({
-          type: 'newRequest',
-          data: null,
-        })
+  let visitDate = document.getElementById('dateVisit');
+  function isSchedulingDateValid(date) {
+    const selectedDate = new Date(date);
+    const today = new Date();
+    const selectedDateOnly = new Date(
+      selectedDate.getFullYear(),
+      selectedDate.getMonth(),
+      selectedDate.getDate() + 1,
+      selectedDate.getHours() + 3,
+      selectedDate.getMinutes(),
+      selectedDate.getSeconds(),
+      selectedDate.getMilliseconds() - 1
+    );
+
+    const todayOnly = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate(),
+      today.getHours(),
+      today.getMinutes(),
+      today.getSeconds(),
+      today.getMilliseconds()
+    );
+
+    const day = selectedDateOnly.getDay();
+    if (day === 0 || day === 6) {
+      showModalAlert(
+        'Alert',
+        'Data Inválida!',
+        'Marque um dia de segunda a sexta.',
+        closeModal
       );
-      await newAddress();
-      closeModalRegister();
-    });
-  */
+      document.getElementById('dateVisit').value = '';
+      return false;
+    }
+
+    if (selectedDateOnly < todayOnly) {
+      showModalAlert(
+        'Alert',
+        'Data Inválida!',
+        'Não é possível agendar para dias e horários passados.',
+        closeModal
+      );
+      document.getElementById('dateVisit').value = '';
+      return false;
+    }
+    return true;
+  }
+  document
+    .getElementById('dateVisit')
+    .setAttribute('min', new Date().toISOString().split('T')[0]);
+
+  document.getElementById('dateVisit').addEventListener('input', function () {
+    isSchedulingDateValid(this.value);
+  });
+
+  visitDate.addEventListener('input', checked);
+
+  const sendBtn = document.getElementById('saveRequest');
+  function checked() {
+    const isVisitFilled = visitDate.value;
+    if (isVisitFilled) {
+      sendBtn.classList.remove('hidden');
+      sendBtn.classList.add('modal-content-btn-ok');
+    } else {
+      sendBtn.classList.remove('modal-content-btn-ok');
+      sendBtn.classList.add('hidden');
+    }
+  }
+
   document.querySelectorAll('input[name="service-type"]').forEach((radio) => {
     radio.addEventListener('change', function () {
       const serviceContainer = document.querySelector('.service-selection');
@@ -462,7 +522,7 @@ export async function modalNewRequest(env) {
     });
   });
 
-  document.getElementById('saveRequest').addEventListener('click', async () => {
+  sendBtn.onclick = async () => {
     const serviceType = document.querySelector(
       'input[name="service-type"]:checked'
     );
@@ -489,6 +549,15 @@ export async function modalNewRequest(env) {
       return;
     }
 
+    if (!visitDate.value) {
+      return showModalAlert(
+        'Alert',
+        'Data do Serviço',
+        'Selecione uma data prevista para o serviço.',
+        closeModal
+      );
+    }
+
     const status = 'Retorno';
     const data = {};
 
@@ -498,6 +567,7 @@ export async function modalNewRequest(env) {
     data.requestType = serviceType.value;
     data.requestStatus = status;
     data.serviceIds = selectedServiceIds;
+    data.requestDate = visitDate.value;
 
     try {
       const requestData = await registerRequest(data);
@@ -521,10 +591,8 @@ export async function modalNewRequest(env) {
     } catch (error) {
       showModalAlert('Erro de Conexão', error.message, closeModal);
     }
-  });
+  };
 }
-
-////////////////////////////////////////////////////////////////
 
 export async function newEnvironment(address) {
   const modal = document.getElementById('modal-details');
@@ -892,7 +960,7 @@ async function servicesEquipment(env) {
       }
     );
   }
-  console.log(servicesData);
+
   const maintenance = servicesData.filter(
     (service) => service.serviceType === 'Manutenção'
   );
@@ -902,12 +970,10 @@ async function servicesEquipment(env) {
     let table = '';
 
     services.forEach((d) => {
-      // Adiciona a linha com a data
       table += `<tr><td colspan="2"><strong>Data:</strong> ${new Date(
         d.date
       ).toLocaleString()}</td></tr>`;
 
-      // Itera sobre o array de manutenção e adiciona os serviços
       d.maintenance.forEach((m) => {
         table += `
           <tr>
