@@ -590,11 +590,12 @@ export async function servicesOrderDetails(order) {
             return true;
           }
         );
-        if (confirmed) {
-          return await modalNewRequest(env);
+         if (confirmed) {
+          await modalNewRequest(env);
+        } else {
+          closeModalDetails();
+          await showModalServicesList();
         }
-        await showModalServicesList();
-        closeModalDetails();
       }
     } catch (error) {
       console.error('Erro ao finalizar ordem de serviço:', error);
