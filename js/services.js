@@ -1,4 +1,4 @@
-const apiUrl = 'https://localhost:3000';
+const apiUrl = 'https://servergta.vercel.app';
 
 export function ErrorBase(
   msg = 'Falha na conexão com servidor. Verifique a internet ou tente novamente.'
