@@ -312,7 +312,7 @@ export async function modalNewRequest(env) {
     showModalAlert(
       'Next',
       'Não há Serviços!',
-      'Por favor, faça cadastros de serviços para gerar Orçamentos.',
+      'Por favor, faça cadastros de serviços para gerar Requisições de Serviço.',
       async () => {
         await showModalNewService();
       }
