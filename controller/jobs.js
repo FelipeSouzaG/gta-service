@@ -592,9 +592,11 @@ export async function servicesOrderDetails(order) {
         );
          if (confirmed) {
           await modalNewRequest(env);
+          return;
         } else {
           closeModalDetails();
           await showModalServicesList();
+          return;
         }
       }
     } catch (error) {
