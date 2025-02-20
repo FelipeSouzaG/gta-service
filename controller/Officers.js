@@ -72,7 +72,6 @@ async function listOfficerModal() {
       }
     );
   }
-  //////////////////////////////////
 
   let filteredOfficers = officers;
 
@@ -334,7 +333,7 @@ document.addEventListener('click', async function (event) {
   }
 });
 
-async function newOfficer() {
+export async function newOfficer() {
   let users = [];
   try {
     const listUsers = await listAllUsers();
