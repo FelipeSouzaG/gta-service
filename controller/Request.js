@@ -21,6 +21,7 @@ import {
   normalizeDate,
 } from '../js/validation.js';
 import { showModalNewService } from './Service.js';
+import { newOfficer } from './Officers.js';
 
 document.addEventListener('DOMContentLoaded', async function () {
   document.getElementById('listRequestMobile').addEventListener('click', () => {
@@ -891,8 +892,7 @@ async function showModalNewOrder(request) {
       'Nenhum Técnico Cadastrado!',
       'Cadastre Colaborador Nível Técnico para atribuir a uma Ordem de Serviço.',
       async () => {
-        await requestDetails(request);
-        closeModalDetails();
+        await newOfficer();
       }
     );
   }
