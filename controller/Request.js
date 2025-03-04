@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     });
 });
 
-async function listRequestModal() {
+export async function listRequestModal() {
   let requests = [];
   try {
     const listRequest = await listAllRequest();
