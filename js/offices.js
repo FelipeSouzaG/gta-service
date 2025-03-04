@@ -5,6 +5,8 @@ import {
   openSession,
   exitSession,
 } from './modals.js';
+import { listRequestModal } from '../controller/Request.js';
+import { showModalServicesList } from '../controller/jobs.js';
 
 document.addEventListener('DOMContentLoaded', async function () {
   const session = localStorage.getItem('session');
@@ -265,76 +267,14 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
   });
 
-  const isAnyOpen = () =>
-    Array.from(mainSections).some((section) =>
-      section.querySelector('.section-main').classList.contains('open')
-    );
-
-  bannerSection.style.height = 'auto';
-
-  const closeAllSections = () => {
-    mainSections.forEach((section) => {
-      const main = section.querySelector('.section-main');
-      main.style.height = '0';
-      main.classList.remove('open');
-      section.querySelector('.toggle-button').textContent = '+';
-    });
-
-    bannerSection.style.height = 'auto';
-    const tempHeight = bannerSection.scrollHeight;
-    bannerSection.style.height = `${tempHeight}px`;
-    setTimeout(() => (bannerSection.style.height = 'auto'), 300);
-  };
-
-  toggleButtons.forEach((button) => {
-    button.addEventListener('click', function (event) {
-      event.stopPropagation();
-      if (menu.classList.contains('show')) {
-        closeAllSubmenus();
-        menu.classList.toggle('show');
-      }
-      const currentSection = this.closest('.section-content');
-      const sectionMain = currentSection.querySelector('.section-main');
-      mainSections.forEach((section) => {
-        const main = section.querySelector('.section-main');
-        if (section !== currentSection) {
-          main.style.height = '0';
-          main.classList.remove('open');
-          section.querySelector('.toggle-button').textContent = '+';
-        }
-      });
-      if (sectionMain.classList.contains('open')) {
-        sectionMain.classList.remove('open');
-        this.textContent = '+';
-        sectionMain.style.height = '0';
-      } else {
-        sectionMain.classList.add('open');
-        this.textContent = '-';
-        sectionMain.style.height = sectionMain.scrollHeight + 'px';
-      }
-      if (isAnyOpen()) {
-        bannerSection.style.height = '0';
-      }
-    });
-  });
-
-  labels.forEach((label) => {
-    label.addEventListener('click', function (event) {
-      event.preventDefault();
-      const buttonId = this.getAttribute('for');
-      const correspondingButton = document.getElementById(buttonId);
-
-      if (correspondingButton) {
-        correspondingButton.click();
-      }
-    });
-  });
-
-  document.addEventListener('click', (event) => {
-    const isToggleButton = event.target.classList.contains('toggle-button');
-    const isLabel = event.target.tagName === 'LABEL';
-    if (!isToggleButton && !isLabel) {
-      closeAllSections();
+  async function openModals() {
+    if (session === 'Secretário' || session === 'Gestor') {
+      await listRequestModal();
     }
-  });
+    if (session === 'Técnico') {
+      await showModalServicesList();
+    }
+  }
+
+  await openModals();
 });
