@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     .addEventListener('click', showModalServicesList);
 });
 
-async function showModalServicesList() {
+export async function showModalServicesList() {
   let services;
 
   try {
