@@ -987,8 +987,8 @@ export async function servicesRequestDetails(request) {
           <tr>
             <th colspan="2" style="text-align: center;">
               Incluir Equipamento no serviço?
-            <th>
-          <tr>
+            </th>
+          </tr>
         </thead>
         <tbody>
           <tr>
@@ -1005,8 +1005,8 @@ export async function servicesRequestDetails(request) {
           <tr>
             <th colspan="2" style="text-align: center;">
               Problemas Reclamados pelo Cliente
-            <th>
-          <tr>
+            </th>
+          </tr>
         </thead>
         <tbody>
           <tr>
